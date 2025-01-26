@@ -147,7 +147,8 @@ button:hover {
             } else {
                 if (totalElectricity > electricityLimit) {
                     sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which exceeds the limit of ' + electricityLimit + ' kWh. ';
-                    suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn-Electricity-Conservation/Electricity_Conservation.html" class="suggestion-link" target="_blank">Click here for suggestions to reduce your electricity consumption.</a>';
+                    suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn/sustAIn.html
+" class="suggestion-link" target="_blank">Click here for suggestions to reduce your electricity consumption.</a>';
                 } else {
                     sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which is within the limit. ';
                 }
@@ -167,6 +168,17 @@ button:hover {
             sustainabilityMessage += '<br><br>Based on your household size and number of rooms, the average expected electricity consumption is ' + averageElectricityUsage + ' kWh and water consumption is ' + averageWaterUsage + ' gallons.';
 
             document.getElementById('result').innerHTML = sustainabilityMessage + suggestionsLink;
+	// Additional analysis based on number of rooms and family members
+	const averageElectricityUsage = (familyMembers * 150) + (rooms * 100); // Example calculation for kWh
+	const averageWaterUsage = (familyMembers * 50) + (rooms * 30); // Example calculation for gallons
+
+	sustainabilityMessage += '<br><br>Based on your household size and number of rooms, the average expected electricity consumption is ' + 	averageElectricityUsage + ' kWh and water consumption is ' + averageWaterUsage + ' gallons.';
+
+	// Add words of encouragement here
+	sustainabilityMessage += '<br><br>Great job taking the time to analyze your consumption! Every small step you take towards sustainability 	makes a difference. Keep up the good work! 🌍💚';
+
+	// Set the result inner HTML
+	document.getElementById('result').innerHTML = sustainabilityMessage + suggestionsLink;
 
             // Prepare data for the graph
             const labels = Array.from({ length: months }, (_, i) => `Month ${i + 1}`);
