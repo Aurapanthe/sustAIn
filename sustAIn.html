@@ -180,12 +180,12 @@ button:hover {
 	// Set the result inner HTML
 	document.getElementById('result').innerHTML = sustainabilityMessage + suggestionsLink;
 
-            // Prepare data for the graph
+        // Prepare data for the graph
             const labels = Array.from({ length: months }, (_, i) => `Month ${i + 1}`);
             const electricityData = electricityConsumption.slice(0, months);
             const waterData = waterConsumption.slice(0, months);
 
-            // Create the graph
+        // Create the graph
             const ctx = document.getElementById('myChart').getContext('2d');
             const myChart = new Chart(ctx, {
                 type: 'line',
