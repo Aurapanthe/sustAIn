@@ -124,88 +124,146 @@ button:hover {
         <canvas id="myChart"></canvas>
     </div>
 
+ html
+
+Verify
+
+Open In Editor
+Run
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sustAIn - Sustainability Analysis</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <h1>sustAIn</h1>
+    <div class="container">
+        <h2>Sustainability Analysis</h2>
+        
+        <label for="months">Number of Previous Months:</label><br>
+        <input type="number" id="months" placeholder="Enter number of months" min="1" max="12"><br>
+        
+        <label for="electricity">Electricity Consumption (kWh, comma-separated):</label><br>
+        <input type="text" id="electricity" placeholder="e.g. 300, 320, 280"><br>
+        
+        <label for="water">Water Consumption (gln, comma-separated):</label><br>
+        <input type="text" id="water" placeholder="e.g. 200, 220, 210"><br>
+        
+        <label for="rooms">Number of Rooms:</label><br>
+        <select id="rooms">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        
+        <label for="familyMembers">Number of Family Members:</label><br>
+        <select id="familyMembers">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        
+        <button onclick="analyzeSustainability()">Analyze</button>
+        
+        <div class="result" id="result"></div>
+        
+        <canvas id="myChart"></canvas>
+    </div>
+
     <script>
         function analyzeSustainability() {
-    const months = parseInt(document.getElementById('months').value);
-    const electricityConsumption = document.getElementById('electricity').value.split(',').map(Number);
-    const waterConsumption = document.getElementById('water').value.split(',').map(Number);
-    const rooms = parseInt(document.getElementById('rooms').value);
-    const familyMembers = parseInt(document.getElementById('familyMembers').value);
+            const months = parseInt(document.getElementById('months').value);
+            const electricityConsumption = document.getElementById('electricity').value.split(',').map(Number);
+            const waterConsumption = document.getElementById('water').value.split(',').map(Number);
+            const rooms = parseInt(document.getElementById('rooms').value);
+            const familyMembers = parseInt(document.getElementById('familyMembers').value);
 
-    const electricityLimit = 714 * months; // Average limit of 714 kWh per month
-    const waterLimit = 1320 * months; // Average limit of 1320 gallons per month
+            const electricityLimit = 714 * months; // Average limit of 714 kWh per month
+            const waterLimit = 1320 * months; // Average limit of 1320 gallons per month
 
-    let totalElectricity = electricityConsumption.reduce((a, b) => a + b , 0);
-    let totalWater = waterConsumption.reduce((a, b) => a + b, 0);
+            let totalElectricity = electricityConsumption.reduce((a, b) => a + b , 0);
+            let totalWater = waterConsumption.reduce((a, b) => a + b, 0);
 
-    let sustainabilityMessage = '';
-    let suggestionsLink = '';
+            let sustainabilityMessage = '';
+            let suggestionsLink = '';
 
-    // Validate input
-    if (isNaN(months) || months < 1 || electricityConsumption.length !== months || waterConsumption.length !== months) {
-        sustainabilityMessage = 'Please enter valid consumption amounts for the specified number of months.';
-    } else {
-        if (totalElectricity > electricityLimit) {
-            sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which exceeds the limit of ' + electricityLimit + ' kWh. ';
-            suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn/sustAIn.html" class="suggestion-link" target="_blank">Click here for suggestions to reduce your electricity consumption.</a>';
-        } else {
-            sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which is within the limit. ';
-        }
-
-        if (totalWater > waterLimit) {
-            sustainabilityMessage += 'Your total water consumption for ' + months + ' months is ' + totalWater + ' gallons, which exceeds the limit of ' + waterLimit + ' gallons. ';
-            suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn-Water-Consumption/Water_Consumption.html" class="suggestion-link" target="_blank">Click here for suggestions to reduce your water consumption.</a>';
-        } else {
-            sustainabilityMessage += 'Your total water consumption for ' + months + ' months is ' + totalWater + ' gallons, which is within the limit. ';
-        }
-    }
-
-    // Additional analysis based on number of rooms and family members
-    const averageElectricityUsage = (familyMembers * 150) + (rooms * 100); // Example calculation for kWh
-    const averageWaterUsage = (familyMembers * 50) + (rooms * 30); // Example calculation for gallons
-
-    sustainabilityMessage += '<br><br>Based on your household size and number of rooms, the average expected electricity consumption is ' + averageElectricityUsage + ' kWh and water consumption is ' + averageWaterUsage + ' gallons.';
-
-    document.getElementById('result').innerHTML = sustainabilityMessage + suggestionsLink;
-
-    // Prepare data for the graph
-    const labels = Array.from({ length: months }, (_, i) => `Month ${i + 1}`);
-    const electricityData = electricityConsumption.slice(0, months);
-    const waterData = waterConsumption.slice(0, months);
-
-    // Create the graph
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Electricity Consumption (kWh)',
-                    data: electricityData,
-                    borderColor: 'darkgreen',
-                    backgroundColor: 'rgba(0, 128, 0, 0.2)',
-                    fill: true,
-                },
-                {
-                    label: 'Water Consumption (gln)',
-                    data: waterData,
-                    borderColor: 'darkblue',
-                    backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                    fill: true,
+            // Validate input
+            if (isNaN(months) || months < 1 || electricityConsumption.length !== months || waterConsumption.length !== months) {
+                sustainabilityMessage = 'Please enter valid consumption amounts for the specified number of months.';
+            } else {
+                if (totalElectricity > electricityLimit) {
+                    sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which exceeds the limit of ' + electricityLimit + ' kWh. ';
+                    suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn/sustAIn.html" class="suggestion-link" target="_blank">Click here for suggestions to reduce your electricity consumption.</a>';
+                } else {
+                    sustainabilityMessage += 'Your total electricity consumption for ' + months + ' months is ' + totalElectricity + ' kWh, which is within the limit. ';
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+
+                if (totalWater > waterLimit) {
+                    sustainabilityMessage += 'Your total water consumption for ' + months + ' months is ' + totalWater + ' gallons, which exceeds the limit of ' + waterLimit + ' gallons. ';
+                    suggestionsLink += '<a href="https://aurapanthe.github.io/sustAIn-Water-Consumption/Water_Consumption.html" class="suggestion-link" target="_blank">Click here for suggestions to reduce your water consumption.</a>';
+                } else {
+                    sustainabilityMessage += 'Your total water consumption for ' + months + ' months is ' + totalWater + ' gallons, which is within the limit. ';
                 }
             }
+
+            // Additional analysis based on number of rooms and family members
+            const averageElectricityUsage = (familyMembers * 150) + (rooms * 100); // Example calculation for kWh
+            const averageWaterUsage = (familyMembers * 50) + (rooms * 30); // Example calculation for gallons
+
+            sustainabilityMessage += '<br><br>Based on your household size and number of rooms, the average expected electricity consumption is ' + averageElectricityUsage + ' kWh and water consumption is ' + averageWaterUsage + ' gallons.';
+
+            document.getElementById('result').innerHTML = sustainabilityMessage + suggestionsLink;
+
+            // Prepare data for the graph
+            const labels = Array.from({ length: months }, (_, i) => `Month ${i + 1}`);
+            const electricityData = electricityConsumption.slice(0, months);
+            const waterData = waterConsumption.slice(0, months);
+
+            // Create the graph
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Electricity Consumption (kWh)',
+                            data: electricityData,
+                            borderColor: 'darkgreen',
+                            backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                            fill: true,
+                        },
+                        {
+                            label: 'Water Consumption (gln)',
+                            data: waterData,
+                            borderColor: 'darkblue',
+                            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                            fill: true,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
-    });
-}
     </script>
 
 </body>
