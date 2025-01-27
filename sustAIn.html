@@ -133,7 +133,7 @@ button:hover {
             const familyMembers = parseInt(document.getElementById('familyMembers').value);
 
             const electricityLimit = 714 * months; // Average limit of 714 kWh per month
-            const waterLimit = 1320 * months; // Average limit of 1320 gallons per month
+            const waterLimit = 50 * months; // Average limit of 50 gallons per month
 
             let totalElectricity = electricityConsumption.reduce((a, b) => a + b , 0);
             let totalWater = waterConsumption.reduce((a, b) => a + b, 0);
